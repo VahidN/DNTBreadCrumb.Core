@@ -1,11 +1,11 @@
 {
-    "version": "1.0.0-*",
+    "version": "1.0.1-*",
 
     "authors": [ "Vahid Nasiri" ],
     "packOptions": {
         "owners": [ "Vahid Nasiri" ],
         "tags": [ "MVC", "breadcrumb", "bread", "crumb", "Twitter", "Bootstrap", ".NET Core" ],
-        "licenseUrl": "https://github.com/VahidN/DNTBreadCrumb.Core/LICENSE.md",
+        "licenseUrl": "https://github.com/VahidN/DNTBreadCrumb.Core/blob/master/LICENSE.md",
         "projectUrl": "https://github.com/VahidN/DNTBreadCrumb.Core"
     },
     "description": "DNTBreadCrumb.Core Creates custom bread crumb definitions, based on Twitter Bootstrap 3.x features.",

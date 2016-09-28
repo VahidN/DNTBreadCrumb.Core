@@ -63,6 +63,11 @@ namespace DNTBreadCrumb.Core
             }
 
             var breadCrumbs = ViewContext.HttpContext.Items[BreadCrumbExtentions.CurrentBreadCrumbKey] as List<BreadCrumb>;
+            if (breadCrumbs == null || !breadCrumbs.Any())
+            {
+                return;
+            }
+
             var currentFullUrl = Request.GetEncodedUrl();
             var currentRouteUrl = new UrlHelper(ViewContext).Action(ViewContext.ActionDescriptor.RouteValues["action"]);
             var isCurrentPageHomeUrl = HomePageUrl.Equals(currentFullUrl, StringComparison.OrdinalIgnoreCase) ||

@@ -12,7 +12,7 @@ To install DNTBreadCrumb.Core, run the following command in the Package Manager 
 PM> Install-Package DNTBreadCrumb.Core
 ```
 
-You can also view the [package page](http://www.nuget.org/packages/DNTBreadCrumb/) on NuGet.
+You can also view the [package page](http://www.nuget.org/packages/DNTBreadCrumb.Core/) on NuGet.
 
 
 

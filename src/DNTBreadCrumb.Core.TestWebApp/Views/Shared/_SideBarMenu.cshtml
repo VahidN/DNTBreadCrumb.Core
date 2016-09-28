@@ -1,0 +1,25 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Features</h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a href="@Url.Action("Index", "Home")">Home page</a>
+        </li>
+        <li class="list-group-item">
+            <a href="@Url.Action("Posts","Home")">Multi-level breadcrumb with dynamic title</a>
+        </li>
+        <li class="list-group-item">
+            <a href="@Url.Action("Index", "News", values: new { id = "" })">News index with GlyphIcon</a>
+        </li>
+        <li class="list-group-item">
+            <a href="@Url.Action("Index","News", values: new { id = "test" })">News - Item 1</a>
+        </li>
+        <li class="list-group-item">
+            <a href="@Url.Action("Archive", "News", values: new { id = "" })">News archive</a>
+        </li>
+        <li class="list-group-item">
+            <a href="@Url.Action("Archive","News", values: new { id = 1 })">News archive - Item 1</a>
+        </li>
+    </ul>
+</div>

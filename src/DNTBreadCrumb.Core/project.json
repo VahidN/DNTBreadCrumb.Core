@@ -4,7 +4,7 @@
     "authors": [ "Vahid Nasiri" ],
     "packOptions": {
         "owners": [ "Vahid Nasiri" ],
-        "tags": [ "MVC", "breadcrumb", "bread", "crumb", "Twitter", "Bootstrap", ".NET Core" ],
+        "tags": [ "MVC", "breadcrumb", "bread", "crumb", "Twitter", "Bootstrap", ".NET Core", "aspnetcore" ],
         "licenseUrl": "https://github.com/VahidN/DNTBreadCrumb.Core/blob/master/LICENSE.md",
         "projectUrl": "https://github.com/VahidN/DNTBreadCrumb.Core"
     },

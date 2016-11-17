@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1-*",
+    "version": "1.0.2-*",
 
     "authors": [ "Vahid Nasiri" ],
     "packOptions": {
@@ -12,12 +12,10 @@
 
 
     "dependencies": {
-        "Microsoft.AspNetCore.Http.Extensions": "1.0.0",
-        "Microsoft.AspNetCore.Mvc.Abstractions": "1.0.1",
+        "Microsoft.AspNetCore.Http.Extensions": "1.1.0",
         "Microsoft.AspNetCore.Mvc.Core": "1.0.1",
         "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.1",
-        "Microsoft.AspNetCore.Razor.Runtime": "1.0.0",
-        "NETStandard.Library": "1.6.0"
+        "Microsoft.AspNetCore.Razor.Runtime": "1.0.0"
     },
 
     "frameworks": {

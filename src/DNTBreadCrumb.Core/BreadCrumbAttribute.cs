@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Routing;
 
 namespace DNTBreadCrumb.Core
@@ -45,15 +48,14 @@ namespace DNTBreadCrumb.Core
         public string Url { get; set; }
 
         /// <summary>
-        /// This property is useful when you need a back functionality. If it's true, the Url value will be previous Url using UrlReferrer
-        /// </summary>
-        public bool UsePreviousUrl { get; set; }
-
-        /// <summary>
         /// This property is useful for controller level bread crumbs. If it's true, the Url value will be calculated automatically from the DefaultRoute
         /// </summary>
         public bool UseDefaultRouteUrl { get; set; }
 
+        /// <summary>
+        /// This property is useful when you need a back functionality. If it's true, the Url value will be previous Url using UrlReferrer
+        /// </summary>
+        public bool UsePreviousUrl { get; set; }
         /// <summary>
         /// Adds the current item to the stack
         /// </summary>
@@ -81,6 +83,8 @@ namespace DNTBreadCrumb.Core
             {
                 url = filterContext.HttpContext.Request.Headers["Referrer"];
             }
+
+            setEmptyTitleFromAttributes(filterContext);
 
             filterContext.HttpContext.AddBreadCrumb(new BreadCrumb
             {
@@ -123,6 +127,51 @@ namespace DNTBreadCrumb.Core
             }
 
             return new UrlHelper(filterContext).ActionWithoutRouteValues(defaultAction, RemoveRouteValues);
+        }
+
+        private void setEmptyTitleFromAttributes(ActionExecutingContext filterContext)
+        {
+            if (!string.IsNullOrWhiteSpace(Title))
+            {
+                return;
+            }
+
+            var descriptor = filterContext.ActionDescriptor as ControllerActionDescriptor;
+            if (descriptor == null)
+            {
+                return;
+            }
+
+            var currentFilter = filterContext.ActionDescriptor
+                                             .FilterDescriptors
+                                             .Select(filterDescriptor => filterDescriptor)
+                                             .FirstOrDefault(filterDescriptor => ReferenceEquals(filterDescriptor.Filter, this));
+            if (currentFilter == null)
+            {
+                return;
+            }
+
+            MemberInfo typeInfo = null;
+
+            if (currentFilter.Scope == FilterScope.Action)
+            {
+                typeInfo = descriptor.MethodInfo;
+            }
+            if (currentFilter.Scope == FilterScope.Controller)
+            {
+                typeInfo = descriptor.ControllerTypeInfo;
+            }
+
+            if (typeInfo == null)
+            {
+                return;
+            }
+
+            Title = typeInfo.GetCustomAttribute<DisplayNameAttribute>(inherit: true)?.DisplayName;
+            if (string.IsNullOrWhiteSpace(Title))
+            {
+                Title = typeInfo.GetCustomAttribute<DescriptionAttribute>(inherit: true)?.Description;
+            }
         }
     }
 }

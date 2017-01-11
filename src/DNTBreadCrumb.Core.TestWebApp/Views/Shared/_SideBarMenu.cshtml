@@ -9,6 +9,8 @@
         <li class="list-group-item">
             <a href="@Url.Action("Posts","Home")">Multi-level breadcrumb with dynamic title</a>
         </li>
+    </ul>
+    <ul class="list-group">
         <li class="list-group-item">
             <a href="@Url.Action("Index", "News", values: new { id = "" })">News index with GlyphIcon</a>
         </li>
@@ -20,6 +22,14 @@
         </li>
         <li class="list-group-item">
             <a href="@Url.Action("Archive","News", values: new { id = 1 })">News archive - Item 1</a>
+        </li>
+    </ul>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a href="@Url.Action("Index", "DisplayName")">DisplayName</a>
+        </li>
+        <li class="list-group-item">
+            <a href="@Url.Action("Reports", "DisplayName")">Reports</a>
         </li>
     </ul>
 </div>

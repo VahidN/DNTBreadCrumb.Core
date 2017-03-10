@@ -1,3 +1,7 @@
+using System;
+using System.Globalization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DNTBreadCrumb.Core.TestWebApp.Controllers
@@ -11,7 +15,7 @@ namespace DNTBreadCrumb.Core.TestWebApp.Controllers
             return View();
         }
 
-        [BreadCrumb(Title = "Posts list", Order = 3)]
+        [BreadCrumb(Title = "Posts List", Order = 3)]
         public ActionResult Posts()
         {
             this.SetCurrentBreadCrumbTitle("dynamic title 1");
@@ -30,6 +34,25 @@ namespace DNTBreadCrumb.Core.TestWebApp.Controllers
             });
 
             return View();
+        }
+
+        [BreadCrumb(TitleResourceName = "LocalizedPosts",
+                    TitleResourceType = typeof(Resources.Controllers_HomeController),
+                    Order = 1)]
+        public ActionResult LocalizedPosts()
+        {
+            return View();
+        }
+
+        public IActionResult SetFaLanguage()
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(new CultureInfo("fa-IR"))),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+
+            return RedirectToAction("LocalizedPosts");
         }
     }
 }

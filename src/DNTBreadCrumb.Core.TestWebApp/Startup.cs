@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
@@ -11,7 +14,10 @@ namespace DNTBreadCrumb.Core.TestWebApp
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddMvc()
+                    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                    .AddDataAnnotationsLocalization();
             services.AddDirectoryBrowser();
         }
 
@@ -23,6 +29,21 @@ namespace DNTBreadCrumb.Core.TestWebApp
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(new CultureInfo("fa-IR")),
+                SupportedCultures = new[]
+                        {
+                        new CultureInfo("en-US"),
+                        new CultureInfo("fa-IR")
+                        },
+                SupportedUICultures = new[]
+                        {
+                        new CultureInfo("en-US"),
+                        new CultureInfo("fa-IR")
+                        }
+            });
 
             // Serve wwwroot as root
             app.UseFileServer();

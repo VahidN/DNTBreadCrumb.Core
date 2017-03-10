@@ -43,6 +43,16 @@ namespace DNTBreadCrumb.Core
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets or sets the resource name (property name) to use as the key for lookups on the resource type.
+        /// </summary>
+        public string TitleResourceName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resource type to use for title lookups.
+        /// </summary>
+        public Type TitleResourceType { get; set; }
+
+        /// <summary>
         /// A constant URL of the current item. If UseDefaultRouteUrl is set to true, its value will be ignored
         /// </summary>
         public string Url { get; set; }
@@ -56,6 +66,7 @@ namespace DNTBreadCrumb.Core
         /// This property is useful when you need a back functionality. If it's true, the Url value will be previous Url using UrlReferrer
         /// </summary>
         public bool UsePreviousUrl { get; set; }
+
         /// <summary>
         /// Adds the current item to the stack
         /// </summary>
@@ -84,6 +95,7 @@ namespace DNTBreadCrumb.Core
                 url = filterContext.HttpContext.Request.Headers["Referrer"];
             }
 
+            setEmptyTitleFromResources();
             setEmptyTitleFromAttributes(filterContext);
 
             filterContext.HttpContext.AddBreadCrumb(new BreadCrumb
@@ -172,6 +184,39 @@ namespace DNTBreadCrumb.Core
             {
                 Title = typeInfo.GetCustomAttribute<DescriptionAttribute>(inherit: true)?.Description;
             }
+        }
+
+        private void setEmptyTitleFromResources()
+        {
+            if (string.IsNullOrWhiteSpace(TitleResourceName) || TitleResourceType == null)
+            {
+                return;
+            }
+
+            var property = TitleResourceType.GetTypeInfo().GetDeclaredProperty(TitleResourceName);
+            if (property != null)
+            {
+                var propertyGetter = property.GetMethod;
+
+                // We only support internal and public properties
+                if (propertyGetter == null || (!propertyGetter.IsAssembly && !propertyGetter.IsPublic))
+                {
+                    // Set the property to null so the exception is thrown as if the property wasn't found
+                    property = null;
+                }
+            }
+
+            if (property == null)
+            {
+                throw new InvalidOperationException($"ResourceType `{TitleResourceType.FullName}` does not have the `{TitleResourceName}` property.");
+            }
+
+            if (property.PropertyType != typeof(string))
+            {
+                throw new InvalidOperationException($"`{TitleResourceType.FullName}.{TitleResourceName}` property is not an string.");
+            }
+
+            Title = (string)property.GetValue(null, null);
         }
     }
 }

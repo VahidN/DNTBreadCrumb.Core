@@ -1,20 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{577CD4A5-C918-47A2-9D73-758F966BC12C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BC8348D4-0689-4E13-8CF0-9F42EF8F7671}"
 	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DNTBreadCrumb.Core", "src\DNTBreadCrumb.Core\DNTBreadCrumb.Core.xproj", "{31C0C1C7-BB49-4910-95D8-FA3D6A4EEFDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DNTBreadCrumb.Core", "src\DNTBreadCrumb.Core\DNTBreadCrumb.Core.csproj", "{31C0C1C7-BB49-4910-95D8-FA3D6A4EEFDB}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DNTBreadCrumb.Core.TestWebApp", "src\DNTBreadCrumb.Core.TestWebApp\DNTBreadCrumb.Core.TestWebApp.xproj", "{7A023AB0-EA48-44B1-B9EC-E30928918E82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DNTBreadCrumb.Core.TestWebApp", "src\DNTBreadCrumb.Core.TestWebApp\DNTBreadCrumb.Core.TestWebApp.csproj", "{7A023AB0-EA48-44B1-B9EC-E30928918E82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

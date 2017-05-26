@@ -23,13 +23,13 @@ namespace DNTBreadCrumb.Core.TestWebApp.Controllers
             this.AddBreadCrumb(new BreadCrumb
             {
                 Title = "Wiki",
-                Url = string.Format("{0}?id=1", Url.Action("Index", "Home")),
+                Url = string.Format("{0}?id=1", Url.Action("Index", "Home", values: new { area = "" })),
                 Order = 1
             });
             this.AddBreadCrumb(new BreadCrumb
             {
                 Title = "Lab",
-                Url = string.Format("{0}?id=2", Url.Action("Index", "Home")),
+                Url = string.Format("{0}?id=2", Url.Action("Index", "Home", values: new { area = "" })),
                 Order = 2
             });
 

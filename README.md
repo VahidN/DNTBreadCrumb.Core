@@ -26,7 +26,7 @@ Usage:
 - Then modify the [_Layout.cshtml](/src/DNTBreadCrumb.Core.TestWebApp/Views/Shared/_Layout.cshtml) file to add its new tag-helper:
 ```xml
  <breadcrumb asp-homepage-title="Home"
-             asp-homepage-url="@Url.Action("Index", "Home")"
+             asp-homepage-url="@Url.Action("Index", "Home", values: new { area = "" })"
              asp-homepage-glyphicon="glyphicon glyphicon-home"></breadcrumb>
 ```
 

@@ -28,7 +28,7 @@ namespace DNTBreadCrumb.Core.TestWebApp.Controllers
                 {
                     Title = "News Archive",
                     Order = 1,
-                    Url = Url.Action("Archive", "News", values: new { id = "" })
+                    Url = Url.Action("Archive", "News", values: new { id = "", area = "" })
                 });
             }
 

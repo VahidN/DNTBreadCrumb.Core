@@ -42,4 +42,4 @@ public class HomeController : Controller
       return View();
    }
 ```
-Please follow the [DNTBreadCrumb.Core.TestWebApp](/src/DNTBreadCrumb.Core.TestWebApp) sample for more scenarios.
+Please follow the [TestWebApp](/src/DNTBreadCrumb.Core.TestWebApp) and [TestWebApp.WithFeatureFolders](/src/DNTBreadCrumb.Core.TestWebApp.WithFeatureFolders) samples for more scenarios.

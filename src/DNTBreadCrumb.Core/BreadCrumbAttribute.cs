@@ -68,12 +68,17 @@ namespace DNTBreadCrumb.Core
         public bool UsePreviousUrl { get; set; }
 
         /// <summary>
+        /// Disables the breadcrumb for Ajax requests. Its default value is true.
+        /// </summary>
+        public bool IgnoreAjaxRequests { get; set; } = true;
+
+        /// <summary>
         /// Adds the current item to the stack
         /// </summary>
         /// <param name="filterContext"></param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (shouldIgnore(filterContext))
+            if (IgnoreAjaxRequests && isAjaxRequest(filterContext))
             {
                 return;
             }
@@ -109,9 +114,10 @@ namespace DNTBreadCrumb.Core
             base.OnActionExecuting(filterContext);
         }
 
-        private static bool shouldIgnore(ActionExecutingContext filterContext)
+        private static bool isAjaxRequest(ActionExecutingContext filterContext)
         {
-            return !string.Equals(filterContext.HttpContext.Request.Method, "GET", StringComparison.OrdinalIgnoreCase);
+            var request = filterContext.HttpContext.Request;
+            return request?.Headers != null && request.Headers["X-Requested-With"] == "XMLHttpRequest";
         }
 
         private string getDefaultControllerActionUrl(ActionExecutingContext filterContext)

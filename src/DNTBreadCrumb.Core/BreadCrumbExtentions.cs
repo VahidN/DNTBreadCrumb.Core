@@ -63,6 +63,18 @@ namespace DNTBreadCrumb.Core
         }
 
         /// <summary>
+        /// Adds a custom bread crumb to the list
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="breadCrumbAction"></param>
+        public static void AddBreadCrumb(this Controller ctx, Action<BreadCrumb> breadCrumbAction)
+        {
+            var breadCrumb = new BreadCrumb();
+            breadCrumbAction(breadCrumb);
+            ctx.AddBreadCrumb(breadCrumb);
+        }
+
+        /// <summary>
         /// Sets the specified item's title
         /// </summary>
         /// <param name="ctx"></param>

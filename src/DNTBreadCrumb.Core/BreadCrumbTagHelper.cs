@@ -96,12 +96,13 @@ namespace DNTBreadCrumb.Core
 
             foreach (var node in breadCrumbs.OrderBy(x => x.Order))
             {
-                if (node.Url.Equals(HomePageUrl, StringComparison.OrdinalIgnoreCase))
+                if (node.Url != null && node.Url.Equals(HomePageUrl, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                if (node.Url.Equals(currentFullUrl, StringComparison.OrdinalIgnoreCase) ||
+                if (node.Url == null ||
+                    node.Url.Equals(currentFullUrl, StringComparison.OrdinalIgnoreCase) ||
                     node.Url.Equals(currentRouteUrl, StringComparison.OrdinalIgnoreCase))
                 {
                     var itemBuilder = new TagBuilder("li");

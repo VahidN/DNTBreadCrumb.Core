@@ -21,18 +21,25 @@ namespace DNTBreadCrumb.Core
         /// Clears the stack of the current items
         /// </summary>
         /// <param name="ctx"></param>
-        public static void ClearBreadCrumbs(this HttpContext ctx)
+        public static bool ClearBreadCrumbs(this HttpContext ctx)
         {
+            if (ctx == null)
+            {
+                return false;
+            }
+
             ctx.Items[CurrentBreadCrumbKey] = new List<BreadCrumb>();
+
+            return true;
         }
 
         /// <summary>
         /// Clears the stack of the current items
         /// </summary>
         /// <param name="ctx"></param>
-        public static void ClearBreadCrumbs(this Controller ctx)
+        public static bool ClearBreadCrumbs(this Controller ctx)
         {
-            ctx.HttpContext.ClearBreadCrumbs();
+            return ctx.HttpContext.ClearBreadCrumbs();
         }
 
         /// <summary>
@@ -40,16 +47,23 @@ namespace DNTBreadCrumb.Core
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="breadCrumb"></param>
-        public static void AddBreadCrumb(this HttpContext ctx, BreadCrumb breadCrumb)
+        public static bool AddBreadCrumb(this HttpContext ctx, BreadCrumb breadCrumb)
         {
+            if (ctx == null)
+            {
+                return false;
+            }
+
             var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ?? new List<BreadCrumb>();
             if (currentBreadCrumbs.Any(crumb => crumb.Url.Equals(breadCrumb.Url, StringComparison.OrdinalIgnoreCase)))
             {
-                return;
+                return false;
             }
 
             currentBreadCrumbs.Add(breadCrumb);
             ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;
+
+            return true;
         }
 
         /// <summary>
@@ -57,9 +71,16 @@ namespace DNTBreadCrumb.Core
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="breadCrumb"></param>
-        public static void AddBreadCrumb(this Controller ctx, BreadCrumb breadCrumb)
+        public static bool AddBreadCrumb(this Controller ctx, BreadCrumb breadCrumb)
         {
+            if (ctx == null)
+            {
+                return false;
+            }
+
             ctx.HttpContext.AddBreadCrumb(breadCrumb);
+
+            return true;
         }
 
         /// <summary>
@@ -67,11 +88,11 @@ namespace DNTBreadCrumb.Core
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="breadCrumbAction"></param>
-        public static void AddBreadCrumb(this Controller ctx, Action<BreadCrumb> breadCrumbAction)
+        public static bool AddBreadCrumb(this Controller ctx, Action<BreadCrumb> breadCrumbAction)
         {
             var breadCrumb = new BreadCrumb();
             breadCrumbAction(breadCrumb);
-            ctx.AddBreadCrumb(breadCrumb);
+            return ctx.AddBreadCrumb(breadCrumb);
         }
 
         /// <summary>
@@ -80,14 +101,24 @@ namespace DNTBreadCrumb.Core
         /// <param name="ctx"></param>
         /// <param name="url"></param>
         /// <param name="title"></param>
-        public static void SetBreadCrumbTitle(this HttpContext ctx, string url, string title)
+        public static bool SetBreadCrumbTitle(this HttpContext ctx, string url, string title)
         {
+            if (ctx == null)
+            {
+                return false;
+            }
+
             var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ?? new List<BreadCrumb>();
             var breadCrumb = currentBreadCrumbs.FirstOrDefault(crumb => crumb.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
-            if (breadCrumb == null) return;
+            if (breadCrumb == null)
+            {
+                return false;
+            }
 
             breadCrumb.Title = title;
             ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;
+
+            return true;
         }
 
         /// <summary>
@@ -96,9 +127,9 @@ namespace DNTBreadCrumb.Core
         /// <param name="ctx"></param>
         /// <param name="url"></param>
         /// <param name="title"></param>
-        public static void SetBreadCrumbTitle(this Controller ctx, string url, string title)
+        public static bool SetBreadCrumbTitle(this Controller ctx, string url, string title)
         {
-            ctx.HttpContext.SetBreadCrumbTitle(url, title);
+            return ctx.HttpContext.SetBreadCrumbTitle(url, title);
         }
 
         /// <summary>
@@ -106,15 +137,25 @@ namespace DNTBreadCrumb.Core
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="title"></param>
-        public static void SetCurrentBreadCrumbTitle(this HttpContext ctx, string title)
+        public static bool SetCurrentBreadCrumbTitle(this HttpContext ctx, string title)
         {
+            if (ctx == null)
+            {
+                return false;
+            }
+
             var url = ctx.Request.GetEncodedUrl();
             var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ?? new List<BreadCrumb>();
             var breadCrumb = currentBreadCrumbs.FirstOrDefault(crumb => crumb.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
-            if (breadCrumb == null) return;
+            if (breadCrumb == null)
+            {
+                return false;
+            }
 
             breadCrumb.Title = title;
             ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;
+
+            return true;
         }
 
         /// <summary>
@@ -122,9 +163,9 @@ namespace DNTBreadCrumb.Core
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="title"></param>
-        public static void SetCurrentBreadCrumbTitle(this Controller ctx, string title)
+        public static bool SetCurrentBreadCrumbTitle(this Controller ctx, string title)
         {
-            ctx.HttpContext.SetCurrentBreadCrumbTitle(title);
+            return ctx.HttpContext.SetCurrentBreadCrumbTitle(title);
         }
     }
 }

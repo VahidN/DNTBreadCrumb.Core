@@ -139,23 +139,7 @@ namespace DNTBreadCrumb.Core
         /// <param name="title"></param>
         public static bool SetCurrentBreadCrumbTitle(this HttpContext ctx, string title)
         {
-            if (ctx == null)
-            {
-                return false;
-            }
-
-            var url = ctx.Request.GetEncodedUrl();
-            var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ?? new List<BreadCrumb>();
-            var breadCrumb = currentBreadCrumbs.FirstOrDefault(crumb => crumb.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
-            if (breadCrumb == null)
-            {
-                return false;
-            }
-
-            breadCrumb.Title = title;
-            ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;
-
-            return true;
+            return ctx.ModifyCurrentBreadCrumb(b => b.Title = title);
         }
 
         /// <summary>
@@ -166,6 +150,72 @@ namespace DNTBreadCrumb.Core
         public static bool SetCurrentBreadCrumbTitle(this Controller ctx, string title)
         {
             return ctx.HttpContext.SetCurrentBreadCrumbTitle(title);
+        }
+
+        /// <summary>
+        ///     Modifies the current bread crumb
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="breadCrumbAction"></param>
+        public static bool ModifyCurrentBreadCrumb(this HttpContext ctx, Action<BreadCrumb> breadCrumbAction)
+        {
+            if (ctx == null)
+            {
+                return false;
+            }
+
+            var url = ctx.Request.GetEncodedUrl();
+            var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ??
+                                     new List<BreadCrumb>();
+            var breadCrumb = currentBreadCrumbs.FirstOrDefault(crumb =>
+                crumb.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
+            if (breadCrumb == null)
+            {
+                return false;
+            }
+
+            breadCrumbAction(breadCrumb);
+            ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;
+
+            return true;
+        }
+
+        /// <summary>
+        ///     Modifies the current bread crumb
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="breadCrumbAction"></param>
+        public static bool ModifyCurrentBreadCrumb(this Controller ctx, Action<BreadCrumb> breadCrumbAction)
+        {
+            return ctx.HttpContext.ModifyCurrentBreadCrumb(breadCrumbAction);
+        }
+
+        /// <summary>
+        /// Returns all the breadcrumbs
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="breadCrumbFilter"></param>
+        public static IEnumerable<BreadCrumb> GetBreadCrumbs(this HttpContext ctx, Predicate<BreadCrumb> breadCrumbFilter = null)
+        {
+            if (ctx == null)
+            {
+                return Enumerable.Empty<BreadCrumb>();
+            }
+
+            var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ??
+                                     new List<BreadCrumb>();
+
+            return currentBreadCrumbs.Where(breadCrumb => breadCrumbFilter == null || breadCrumbFilter(breadCrumb));
+        }
+
+        /// <summary>
+        /// Returns all the breadcrumbs
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="breadCrumbFilter"></param>
+        public static IEnumerable<BreadCrumb> GetBreadCrumbs (this Controller ctx, Predicate<BreadCrumb> breadCrumbFilter = null)
+        {
+            return ctx.HttpContext.GetBreadCrumbs(breadCrumbFilter);
         }
     }
 }

@@ -102,8 +102,9 @@ namespace DNTBreadCrumb.Core
                 }
 
                 if (node.Url == null ||
-                    node.Url.Equals(currentFullUrl, StringComparison.OrdinalIgnoreCase) ||
-                    node.Url.Equals(currentRouteUrl, StringComparison.OrdinalIgnoreCase))
+                    !node.ForceUrl &&
+                    (node.Url.Equals(currentFullUrl, StringComparison.OrdinalIgnoreCase) ||
+                     node.Url.Equals(currentRouteUrl, StringComparison.OrdinalIgnoreCase)))
                 {
                     var itemBuilder = new TagBuilder("li");
                     itemBuilder.AddCssClass("active");

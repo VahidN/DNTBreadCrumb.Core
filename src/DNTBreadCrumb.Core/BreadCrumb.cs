@@ -24,5 +24,10 @@ namespace DNTBreadCrumb.Core
         /// Oder of the current item in the final list
         /// </summary>
         public int Order { set; get; }
+
+        /// <summary>
+        /// Forces the generated bread crumbs url to be rendered as an achor tag
+        /// </summary>
+        public bool ForceUrl { get; set; }
     }
 }

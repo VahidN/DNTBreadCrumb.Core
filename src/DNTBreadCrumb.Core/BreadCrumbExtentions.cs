@@ -4,6 +4,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+#if NETSTANDARD2_0
+using Microsoft.AspNetCore.Mvc.RazorPages;
+#endif
 
 namespace DNTBreadCrumb.Core
 {
@@ -41,6 +44,16 @@ namespace DNTBreadCrumb.Core
         {
             return ctx.HttpContext.ClearBreadCrumbs();
         }
+
+#if NETSTANDARD2_0
+        /// <summary>
+        /// Clears the stack of the current items
+        /// </summary>
+        public static bool ClearBreadCrumbs(this PageModel pageModel)
+        {
+           return pageModel.HttpContext.ClearBreadCrumbs();
+        }
+#endif
 
         /// <summary>
         /// Adds a custom bread crumb to the list
@@ -95,6 +108,27 @@ namespace DNTBreadCrumb.Core
             return ctx.AddBreadCrumb(breadCrumb);
         }
 
+#if NETSTANDARD2_0
+        /// <summary>
+        /// Adds a custom bread crumb to the list
+        /// </summary>
+        public static bool AddBreadCrumb(this PageModel pageModel, BreadCrumb breadCrumb)
+        {
+            pageModel.HttpContext.AddBreadCrumb(breadCrumb);
+            return true;
+        }
+
+        /// <summary>
+        /// Adds a custom bread crumb to the list
+        /// </summary>
+        public static bool AddBreadCrumb(this PageModel pageModel, Action<BreadCrumb> breadCrumbAction)
+        {
+            var breadCrumb = new BreadCrumb();
+            breadCrumbAction(breadCrumb);
+            return pageModel.AddBreadCrumb(breadCrumb);
+        }
+#endif
+
         /// <summary>
         /// Sets the specified item's title
         /// </summary>
@@ -132,6 +166,16 @@ namespace DNTBreadCrumb.Core
             return ctx.HttpContext.SetBreadCrumbTitle(url, title);
         }
 
+#if NETSTANDARD2_0
+        /// <summary>
+        /// Sets the specified item's title
+        /// </summary>
+        public static bool SetBreadCrumbTitle(this PageModel pageModel, string url, string title)
+        {
+            return pageModel.HttpContext.SetBreadCrumbTitle(url, title);
+        }
+#endif
+
         /// <summary>
         /// Sets the current item's title. It's useful for changing the title of the current action method's bread crumb dynamically.
         /// </summary>
@@ -151,6 +195,16 @@ namespace DNTBreadCrumb.Core
         {
             return ctx.HttpContext.SetCurrentBreadCrumbTitle(title);
         }
+
+#if NETSTANDARD2_0
+        /// <summary>
+        /// Sets the current item's title. It's useful for changing the title of the current action method's bread crumb dynamically.
+        /// </summary>
+        public static bool SetCurrentBreadCrumbTitle(this PageModel pageModel, string title)
+        {
+            return pageModel.HttpContext.SetCurrentBreadCrumbTitle(title);
+        }
+#endif
 
         /// <summary>
         ///     Modifies the current bread crumb
@@ -190,6 +244,16 @@ namespace DNTBreadCrumb.Core
             return ctx.HttpContext.ModifyCurrentBreadCrumb(breadCrumbAction);
         }
 
+#if NETSTANDARD2_0
+        /// <summary>
+        ///     Modifies the current bread crumb
+        /// </summary>
+        public static bool ModifyCurrentBreadCrumb(this PageModel pageModel, Action<BreadCrumb> breadCrumbAction)
+        {
+            return pageModel.HttpContext.ModifyCurrentBreadCrumb(breadCrumbAction);
+        }
+#endif
+
         /// <summary>
         /// Returns all the breadcrumbs
         /// </summary>
@@ -213,9 +277,19 @@ namespace DNTBreadCrumb.Core
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="breadCrumbFilter"></param>
-        public static IEnumerable<BreadCrumb> GetBreadCrumbs (this Controller ctx, Predicate<BreadCrumb> breadCrumbFilter = null)
+        public static IEnumerable<BreadCrumb> GetBreadCrumbs(this Controller ctx, Predicate<BreadCrumb> breadCrumbFilter = null)
         {
             return ctx.HttpContext.GetBreadCrumbs(breadCrumbFilter);
         }
+
+#if NETSTANDARD2_0
+        /// <summary>
+        /// Returns all the breadcrumbs
+        /// </summary>
+        public static IEnumerable<BreadCrumb> GetBreadCrumbs(this PageModel pageModel, Predicate<BreadCrumb> breadCrumbFilter = null)
+        {
+            return pageModel.HttpContext.GetBreadCrumbs(breadCrumbFilter);
+        }
+#endif
     }
 }

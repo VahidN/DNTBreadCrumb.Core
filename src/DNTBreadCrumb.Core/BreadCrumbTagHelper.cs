@@ -135,21 +135,17 @@ namespace DNTBreadCrumb.Core
 
         private string getCurrentRouteUrl()
         {
-            var currentRouteUrl = string.Empty;
-            if (ViewContext.ActionDescriptor.RouteValues.TryGetValue("action", out string action))
+            var routeValues = ViewContext.ActionDescriptor.RouteValues;
+            if (routeValues.TryGetValue("action", out var action))
             {
-                currentRouteUrl = new UrlHelper(ViewContext).Action(action);
+                return new UrlHelper(ViewContext).Action(action);
             }
 
-            if (string.IsNullOrWhiteSpace(currentRouteUrl))
+            if (routeValues.TryGetValue("page", out var page))
             {
-                if (ViewContext.ActionDescriptor.RouteValues.TryGetValue("page", out string page))
-                {
-                    currentRouteUrl = page;
-                }
+                return page;
             }
-
-            return currentRouteUrl;
+            return string.Empty;
         }
     }
 }

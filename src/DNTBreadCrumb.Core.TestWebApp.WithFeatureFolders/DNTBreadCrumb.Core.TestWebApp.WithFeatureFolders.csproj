@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
@@ -11,14 +11,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0" />
   </ItemGroup>
   <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
     <!--<Exec Command="bower install" />-->
     <Exec Command="dotnet bundle" />
   </Target>
   <ItemGroup>
-    <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.4.337" />
+    <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.8.391" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DNTBreadCrumb.Core\DNTBreadCrumb.Core.csproj" />

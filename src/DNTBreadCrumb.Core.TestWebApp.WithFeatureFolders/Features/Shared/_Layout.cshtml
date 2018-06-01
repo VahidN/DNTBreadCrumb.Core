@@ -20,9 +20,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                @*@{Html.RenderPartial("_SideBarMenu");}*@
+                @*<partial name="_SideBarMenu" />*@
                 @*for the Admin Area with Features:*@
-                @{Html.RenderPartial("~/Features/Shared/_SideBarMenu.cshtml");}
+                <partial name="~/Features/Shared/_SideBarMenu.cshtml" />
             </div>
             <div class="col-md-9">
                 @RenderBody()

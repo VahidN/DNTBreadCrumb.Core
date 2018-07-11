@@ -36,6 +36,12 @@ namespace DNTBreadCrumb.Core
         public string HomePageGlyphIcon { set; get; }
 
         /// <summary>
+        /// Set version of bootstrap that you are using
+        /// </summary>
+        [HtmlAttributeName("asp-bootstrap-version")]
+        public BootstrapVersion BootstrapVersion { get; set; } = BootstrapVersion.V3;
+
+        /// <summary>
         ///
         /// </summary>
         protected HttpRequest Request => ViewContext.HttpContext.Request;
@@ -82,6 +88,10 @@ namespace DNTBreadCrumb.Core
             {
                 var itemBuilder = new TagBuilder("li");
                 itemBuilder.AddCssClass("active");
+                if (BootstrapVersion == BootstrapVersion.V4)
+                {
+                    itemBuilder.AddCssClass("breadcrumb-item");
+                }
                 itemBuilder.InnerHtml.AppendHtml(
                     $"<span class='{HomePageGlyphIcon}' aria-hidden='true'></span> {HomePageTitle}");
                 output.Content.AppendHtml(itemBuilder);
@@ -89,6 +99,10 @@ namespace DNTBreadCrumb.Core
             else
             {
                 var itemBuilder = new TagBuilder("li");
+                if (BootstrapVersion == BootstrapVersion.V4)
+                {
+                    itemBuilder.AddCssClass("breadcrumb-item");
+                }
                 itemBuilder.InnerHtml.AppendHtml(
                     $"<a href='{HomePageUrl}'><span class='{HomePageGlyphIcon}' aria-hidden='true'></span> {HomePageTitle}</a>");
                 output.Content.AppendHtml(itemBuilder);
@@ -108,6 +122,10 @@ namespace DNTBreadCrumb.Core
                 {
                     var itemBuilder = new TagBuilder("li");
                     itemBuilder.AddCssClass("active");
+                    if (BootstrapVersion == BootstrapVersion.V4)
+                    {
+                        itemBuilder.AddCssClass("breadcrumb-item");
+                    }
 
                     if (!string.IsNullOrWhiteSpace(node.GlyphIcon))
                     {
@@ -120,6 +138,10 @@ namespace DNTBreadCrumb.Core
                 else
                 {
                     var itemBuilder = new TagBuilder("li");
+                    if (BootstrapVersion == BootstrapVersion.V4)
+                    {
+                        itemBuilder.AddCssClass("breadcrumb-item");
+                    }
                     itemBuilder.InnerHtml.AppendHtml($"<a href='{node.Url}'>");
                     if (!string.IsNullOrWhiteSpace(node.GlyphIcon))
                     {

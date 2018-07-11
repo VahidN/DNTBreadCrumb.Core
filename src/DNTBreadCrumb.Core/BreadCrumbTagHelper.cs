@@ -69,7 +69,7 @@ namespace DNTBreadCrumb.Core
             }
 
             var currentFullUrl = Request.GetEncodedUrl();
-            var currentRouteUrl = new UrlHelper(ViewContext).Action(ViewContext.ActionDescriptor.RouteValues["action"]);
+            string currentRouteUrl = getCurrentRouteUrl();
             var isCurrentPageHomeUrl = HomePageUrl.Equals(currentFullUrl, StringComparison.OrdinalIgnoreCase) ||
                                        HomePageUrl.Equals(currentRouteUrl, StringComparison.OrdinalIgnoreCase);
 
@@ -131,6 +131,21 @@ namespace DNTBreadCrumb.Core
                     output.Content.AppendHtml(itemBuilder);
                 }
             }
+        }
+
+        private string getCurrentRouteUrl()
+        {
+            var routeValues = ViewContext.ActionDescriptor.RouteValues;
+            if (routeValues.TryGetValue("action", out var action))
+            {
+                return new UrlHelper(ViewContext).Action(action);
+            }
+
+            if (routeValues.TryGetValue("page", out var page))
+            {
+                return page;
+            }
+            return string.Empty;
         }
     }
 }

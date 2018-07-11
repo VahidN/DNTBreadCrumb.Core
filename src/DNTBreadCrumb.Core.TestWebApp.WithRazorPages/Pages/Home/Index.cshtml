@@ -1,0 +1,12 @@
+@page
+@model IndexModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Home</h2>
+
+<form method="POST" asp-action="Index" asp-controller="Home">
+  <button type="submit" class="btn btn-default">Sumbit</button>
+</form>

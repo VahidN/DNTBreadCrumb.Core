@@ -68,10 +68,6 @@ namespace DNTBreadCrumb.Core
             }
 
             var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ?? new List<BreadCrumb>();
-            if (currentBreadCrumbs.Any(crumb => crumb.Url.Equals(breadCrumb.Url, StringComparison.OrdinalIgnoreCase)))
-            {
-                return false;
-            }
 
             currentBreadCrumbs.Add(breadCrumb);
             ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;

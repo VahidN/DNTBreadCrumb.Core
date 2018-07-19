@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DNTBreadCrumb.Core.TestWebApp.Controllers
 {
-    [BreadCrumb(Title = "Home", UseDefaultRouteUrl = true, Order = 0)]
+    [BreadCrumb(Title = "Home", Url = "Posts", Order = 0)]
     public class HomeController : Controller
     {
         [BreadCrumb(Title = "Main index", Order = 1)]
@@ -15,7 +15,7 @@ namespace DNTBreadCrumb.Core.TestWebApp.Controllers
             return View();
         }
 
-        [BreadCrumb(Title = "Posts List", Order = 3)]
+        [BreadCrumb(Title = "Posts List", Url = "Posts", Order = 3)]
         public ActionResult Posts()
         {
             this.SetCurrentBreadCrumbTitle("dynamic title 1");

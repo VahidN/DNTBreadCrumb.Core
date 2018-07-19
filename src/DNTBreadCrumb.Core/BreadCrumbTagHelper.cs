@@ -82,6 +82,7 @@ namespace DNTBreadCrumb.Core
             {
                 var itemBuilder = new TagBuilder("li");
                 itemBuilder.AddCssClass("active");
+                itemBuilder.AddCssClass("breadcrumb-item");
                 itemBuilder.InnerHtml.AppendHtml(
                     $"<span class='{HomePageGlyphIcon}' aria-hidden='true'></span> {HomePageTitle}");
                 output.Content.AppendHtml(itemBuilder);
@@ -89,6 +90,7 @@ namespace DNTBreadCrumb.Core
             else
             {
                 var itemBuilder = new TagBuilder("li");
+                itemBuilder.AddCssClass("breadcrumb-item");
                 itemBuilder.InnerHtml.AppendHtml(
                     $"<a href='{HomePageUrl}'><span class='{HomePageGlyphIcon}' aria-hidden='true'></span> {HomePageTitle}</a>");
                 output.Content.AppendHtml(itemBuilder);
@@ -108,6 +110,7 @@ namespace DNTBreadCrumb.Core
                 {
                     var itemBuilder = new TagBuilder("li");
                     itemBuilder.AddCssClass("active");
+                    itemBuilder.AddCssClass("breadcrumb-item");
 
                     if (!string.IsNullOrWhiteSpace(node.GlyphIcon))
                     {
@@ -121,6 +124,7 @@ namespace DNTBreadCrumb.Core
                 {
                     var itemBuilder = new TagBuilder("li");
                     itemBuilder.InnerHtml.AppendHtml($"<a href='{node.Url}'>");
+                    itemBuilder.AddCssClass("breadcrumb-item");
                     if (!string.IsNullOrWhiteSpace(node.GlyphIcon))
                     {
                         itemBuilder.InnerHtml.AppendHtml(

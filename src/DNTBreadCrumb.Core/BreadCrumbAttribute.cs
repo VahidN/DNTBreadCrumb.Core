@@ -57,6 +57,8 @@ namespace DNTBreadCrumb.Core
         /// </summary>
         public string Url { get; set; }
 
+        public bool UseAbsoluteUrl { get; set; }
+
         /// <summary>
         /// This property is useful for controller level bread crumbs. If it's true, the Url value will be calculated automatically from the DefaultRoute
         /// </summary>
@@ -89,6 +91,16 @@ namespace DNTBreadCrumb.Core
             }
 
             var url = string.IsNullOrWhiteSpace(Url) ? filterContext.HttpContext.Request.GetEncodedUrl() : Url;
+
+            var request = filterContext.HttpContext.Request;
+            var scheme = request.Scheme;
+            var hostName = request.Host.Host;
+            var port = request.Host.Port;
+
+            if (UseAbsoluteUrl)
+            {
+                url = new UriBuilder(scheme, hostName, port ?? 80, url).ToString();
+            }
 
             if (UseDefaultRouteUrl)
             {

@@ -160,7 +160,12 @@ namespace DNTBreadCrumb.Core
             var routeValues = ViewContext.ActionDescriptor.RouteValues;
             if (routeValues.TryGetValue("action", out var action))
             {
-                return new UrlHelper(ViewContext).Action(action);
+                var urlHelper = ViewContext.HttpContext.Items.Values.OfType<IUrlHelper>().FirstOrDefault();
+                if (urlHelper == null)
+                {
+                    throw new NullReferenceException("Failed to find the IUrlHelper of the ViewContext.HttpContext.");
+                }
+                return urlHelper.Action(action);
             }
 
             if (routeValues.TryGetValue("page", out var page))

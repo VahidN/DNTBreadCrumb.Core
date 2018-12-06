@@ -19,7 +19,7 @@ namespace DNTBreadCrumb.Core.TestWebApp
             services.AddMvc()
                     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                     .AddDataAnnotationsLocalization()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDirectoryBrowser();
         }
 

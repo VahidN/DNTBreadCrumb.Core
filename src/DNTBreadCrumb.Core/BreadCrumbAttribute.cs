@@ -122,29 +122,57 @@ namespace DNTBreadCrumb.Core
 
         private string getDefaultControllerActionUrl(ActionExecutingContext filterContext)
         {
-            var defaultRoute = filterContext.RouteData.Routers.OfType<Route>().FirstOrDefault();
-            if (defaultRoute == null)
-            {
-                throw new InvalidOperationException("The default route of this controller not found.");
-            }
-
-            var defaultAction = defaultRoute.Defaults["action"] as string;
-            if (defaultAction == null)
-            {
-                throw new InvalidOperationException("The default action of this controller not found.");
-            }
+            var defaultAction = getDefaultAction(filterContext);
+            var urlHelper = getUrlHelper(filterContext);
 
             if (RemoveAllDefaultRouteValues)
             {
-                return new UrlHelper(filterContext).ActionWithoutRouteValues(defaultAction);
+                return urlHelper.ActionWithoutRouteValues(defaultAction);
             }
 
             if (RemoveRouteValues == null || !RemoveRouteValues.Any())
             {
-                return new UrlHelper(filterContext).Action(defaultAction);
+                return urlHelper.Action(defaultAction);
             }
 
-            return new UrlHelper(filterContext).ActionWithoutRouteValues(defaultAction, RemoveRouteValues);
+            return urlHelper.ActionWithoutRouteValues(defaultAction, RemoveRouteValues);
+        }
+
+        private static IUrlHelper getUrlHelper(ActionExecutingContext filterContext)
+        {
+            var controller = filterContext.Controller as Controller;
+            if (controller == null)
+            {
+                throw new NullReferenceException("Failed to find the current Controller.");
+            }
+
+            var urlHelper = controller.Url;
+            if (urlHelper == null)
+            {
+                throw new NullReferenceException("Failed to find the IUrlHelper of the filterContext.Controller.");
+            }
+
+            return urlHelper;
+        }
+
+        private static string getDefaultAction(ActionExecutingContext filterContext)
+        {
+            object defaultActionData;
+            var defaultRoute = filterContext.RouteData.Routers.OfType<Route>().FirstOrDefault();
+            if (defaultRoute != null)
+            {
+                if (defaultRoute.Defaults.TryGetValue("action", out defaultActionData))
+                {
+                    return defaultActionData as string;
+                }
+                throw new InvalidOperationException("The default action of this controller not found.");
+            }
+
+            if (filterContext.RouteData.Values.TryGetValue("action", out defaultActionData))
+            {
+                return defaultActionData as string;
+            }
+            throw new InvalidOperationException("The default action of this controller not found.");
         }
 
         private void setEmptyTitleFromAttributes(ActionExecutingContext filterContext)

@@ -1,3 +1,5 @@
+using System;
+
 namespace DNTBreadCrumb.Core
 {
     /// <summary>
@@ -5,10 +7,16 @@ namespace DNTBreadCrumb.Core
     /// </summary>
     public class BreadCrumb
     {
+        private string _url;
+
         /// <summary>
         /// A constant URL of the current item
         /// </summary>
-        public string Url { set; get; }
+        public string Url
+        {
+            set => _url = value;
+            get => _url ?? UrlFactory?.Invoke();
+        }
 
         /// <summary>
         /// Title of the current item
@@ -28,6 +36,11 @@ namespace DNTBreadCrumb.Core
         /// <summary>
         /// Forces the generated bread crumbs url to be rendered as an achor tag
         /// </summary>
-        public bool ForceUrl { get; set; }
+        public bool ForceUrl { set; get; }
+
+        /// <summary>
+        /// Deferred URL generation, if URL is also set, URL has a higher priority
+        /// </summary>
+        public Func<string> UrlFactory { set; get; }
     }
 }

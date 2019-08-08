@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETCOREAPP3_0
 using Microsoft.AspNetCore.Mvc.RazorPages;
 #endif
 
@@ -45,13 +45,13 @@ namespace DNTBreadCrumb.Core
             return ctx.HttpContext.ClearBreadCrumbs();
         }
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETCOREAPP3_0
         /// <summary>
         /// Clears the stack of the current items
         /// </summary>
         public static bool ClearBreadCrumbs(this PageModel pageModel)
         {
-           return pageModel.HttpContext.ClearBreadCrumbs();
+            return pageModel.HttpContext.ClearBreadCrumbs();
         }
 #endif
 
@@ -108,7 +108,7 @@ namespace DNTBreadCrumb.Core
             return ctx.AddBreadCrumb(breadCrumb);
         }
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETCOREAPP3_0
         /// <summary>
         /// Adds a custom bread crumb to the list
         /// </summary>
@@ -166,7 +166,7 @@ namespace DNTBreadCrumb.Core
             return ctx.HttpContext.SetBreadCrumbTitle(url, title);
         }
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETCOREAPP3_0
         /// <summary>
         /// Sets the specified item's title
         /// </summary>
@@ -196,7 +196,7 @@ namespace DNTBreadCrumb.Core
             return ctx.HttpContext.SetCurrentBreadCrumbTitle(title);
         }
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETCOREAPP3_0
         /// <summary>
         /// Sets the current item's title. It's useful for changing the title of the current action method's bread crumb dynamically.
         /// </summary>
@@ -244,7 +244,7 @@ namespace DNTBreadCrumb.Core
             return ctx.HttpContext.ModifyCurrentBreadCrumb(breadCrumbAction);
         }
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETCOREAPP3_0
         /// <summary>
         ///     Modifies the current bread crumb
         /// </summary>
@@ -282,7 +282,7 @@ namespace DNTBreadCrumb.Core
             return ctx.HttpContext.GetBreadCrumbs(breadCrumbFilter);
         }
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETCOREAPP3_0
         /// <summary>
         /// Returns all the breadcrumbs
         /// </summary>

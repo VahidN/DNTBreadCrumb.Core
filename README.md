@@ -1,6 +1,11 @@
 DNTBreadCrumb.Core
 =======
-[![Build status](https://ci.appveyor.com/api/projects/status/oudvwqearnph8p6b?svg=true)](https://ci.appveyor.com/project/VahidN/dntbreadcrumb-core)
+
+<p align="left">
+  <a href="https://github.com/VahidN/DNTBreadCrumb.Core">
+     <img alt="GitHub Actions status" src="https://github.com/VahidN/DNTBreadCrumb.Core/workflows/.NET%20Core%20Build/badge.svg">
+  </a>
+</p>
 
 `DNTBreadCrumb.Core` Creates custom bread crumb definitions, based on Twitter Bootstrap 3.x and 4.x features for ASP.NET Core applications.
 

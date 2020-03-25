@@ -60,6 +60,13 @@ namespace DNTBreadCrumb.Core.TestWebApp
                             endpoints.MapControllerRoute(
                                 name: "areas",
                                 pattern: "{area:exists}/{controller=Account}/{action=Index}/{id?}");
+
+                            endpoints.MapControllerRoute(
+                                name: "notDefault",
+                                pattern: "Test/{controller=ManagePool}/{action=NotIndex}/{id?}",
+                                constraints: new { controller = "^ManagePool$" }
+                                );
+
                             endpoints.MapControllerRoute(
                                 name: "default",
                                 pattern: "{controller=Home}/{action=Index}/{id?}");

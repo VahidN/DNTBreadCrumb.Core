@@ -3,11 +3,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.AspNetCore.Routing;
 
 namespace DNTBreadCrumb.Core
 {
@@ -122,7 +120,7 @@ namespace DNTBreadCrumb.Core
 
         private string getDefaultControllerActionUrl(ActionExecutingContext filterContext)
         {
-            var defaultAction = getDefaultAction(filterContext);
+            var defaultAction = string.Empty;
             var urlHelper = getUrlHelper(filterContext);
 
             if (RemoveAllDefaultRouteValues)
@@ -130,7 +128,7 @@ namespace DNTBreadCrumb.Core
                 return urlHelper.ActionWithoutRouteValues(defaultAction);
             }
 
-            if (RemoveRouteValues == null || !RemoveRouteValues.Any())
+            if (RemoveRouteValues?.Any() != true)
             {
                 return urlHelper.Action(defaultAction);
             }
@@ -140,8 +138,7 @@ namespace DNTBreadCrumb.Core
 
         private static IUrlHelper getUrlHelper(ActionExecutingContext filterContext)
         {
-            var controller = filterContext.Controller as Controller;
-            if (controller == null)
+            if (!(filterContext.Controller is Controller controller))
             {
                 throw new NullReferenceException("Failed to find the current Controller.");
             }
@@ -155,26 +152,6 @@ namespace DNTBreadCrumb.Core
             return urlHelper;
         }
 
-        private static string getDefaultAction(ActionExecutingContext filterContext)
-        {
-            object defaultActionData;
-            var defaultRoute = filterContext.RouteData.Routers.OfType<Route>().FirstOrDefault();
-            if (defaultRoute != null)
-            {
-                if (defaultRoute.Defaults.TryGetValue("action", out defaultActionData))
-                {
-                    return defaultActionData as string;
-                }
-                throw new InvalidOperationException("The default action of this controller not found.");
-            }
-
-            if (filterContext.RouteData.Values.TryGetValue("action", out defaultActionData))
-            {
-                return defaultActionData as string;
-            }
-            throw new InvalidOperationException("The default action of this controller not found.");
-        }
-
         private void setEmptyTitleFromAttributes(ActionExecutingContext filterContext)
         {
             if (!string.IsNullOrWhiteSpace(Title))
@@ -182,16 +159,15 @@ namespace DNTBreadCrumb.Core
                 return;
             }
 
-            var descriptor = filterContext.ActionDescriptor as ControllerActionDescriptor;
-            if (descriptor == null)
+            if (!(filterContext.ActionDescriptor is ControllerActionDescriptor descriptor))
             {
                 return;
             }
 
             var currentFilter = filterContext.ActionDescriptor
-                                             .FilterDescriptors
-                                             .Select(filterDescriptor => filterDescriptor)
-                                             .FirstOrDefault(filterDescriptor => ReferenceEquals(filterDescriptor.Filter, this));
+                                            .FilterDescriptors
+                                            .Select(filterDescriptor => filterDescriptor)
+                                            .FirstOrDefault(filterDescriptor => ReferenceEquals(filterDescriptor.Filter, this));
             if (currentFilter == null)
             {
                 return;

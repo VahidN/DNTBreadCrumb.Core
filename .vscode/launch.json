@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceRoot}/src/DNTBreadCrumb.Core.TestWebApp/bin/Debug/netcoreapp2.2/DNTBreadCrumb.Core.TestWebApp.dll",
+      "program": "${workspaceRoot}/src/DNTBreadCrumb.Core.TestWebApp/bin/Debug/netcoreapp3.1/DNTBreadCrumb.Core.TestWebApp.dll",
       "args": [],
       "cwd": "${workspaceRoot}/src/DNTBreadCrumb.Core.TestWebApp",
       "stopAtEntry": false,

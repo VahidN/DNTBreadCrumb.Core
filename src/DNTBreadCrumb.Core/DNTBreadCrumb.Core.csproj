@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>DNTBreadCrumb.Core Creates custom bread crumb definitions, based on Twitter Bootstrap 3.x and 4.x features.</Description>
-    <VersionPrefix>1.9.1</VersionPrefix>
+    <VersionPrefix>1.9.2</VersionPrefix>
     <Authors>Vahid Nasiri</Authors>
-    <TargetFrameworks>netcoreapp3.0;netstandard1.6;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;netcoreapp3.0;netstandard1.6;netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>DNTBreadCrumb.Core</AssemblyName>
     <PackageId>DNTBreadCrumb.Core</PackageId>
@@ -35,10 +35,10 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <PlatformTarget>anycpu</PlatformTarget>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' or  '$(TargetFramework)' == 'netcoreapp3.1'">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0' or  '$(TargetFramework)' == 'netcoreapp3.1'">
     <DefineConstants>NETCOREAPP3_0</DefineConstants>
   </PropertyGroup>
 </Project>

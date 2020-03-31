@@ -3,11 +3,11 @@
 namespace DNTBreadCrumb.Core.TestWebApp.WithFeatureFolders.Features.News
 {
     [BreadCrumb(Title = "News Root", UseDefaultRouteUrl = true, RemoveAllDefaultRouteValues = true,
-        Order = 0, GlyphIcon = "glyphicon glyphicon-link")]
+        Order = 0, GlyphIcon = "glyphicon glyphicon-link", IgnoreAjaxRequests = true)]
     public class NewsController : Controller
     {
 
-        [BreadCrumb(Title = "Main index", Order = 1)]
+        [BreadCrumb(Title = "Main index", Order = 1, IgnoreAjaxRequests = true)]
         public ActionResult Index(string id)
         {
             if (!string.IsNullOrWhiteSpace(id))
@@ -18,7 +18,7 @@ namespace DNTBreadCrumb.Core.TestWebApp.WithFeatureFolders.Features.News
             return View();
         }
 
-        [BreadCrumb(Title = "News Archive", Order = 2)]
+        [BreadCrumb(Title = "News Archive", Order = 2, IgnoreAjaxRequests = true)]
         public ActionResult Archive(int? id)
         {
             if (id != null)

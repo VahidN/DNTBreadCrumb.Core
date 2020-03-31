@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DNTBreadCrumb.Core.TestWebApp.Controllers
 {
-    [BreadCrumb(Title = "Home", UseDefaultRouteUrl = true, Order = 0)]
+    [BreadCrumb(Title = "Home", UseDefaultRouteUrl = true, Order = 0, IgnoreAjaxRequests = true)]
     public class HomeController : Controller
     {
-        [BreadCrumb(Title = "Main index", Order = 1)]
+        [BreadCrumb(Title = "Main index", Order = 1, IgnoreAjaxRequests = true)]
         public ActionResult Index()
         {
             return View();
         }
 
-        [BreadCrumb(Title = "Posts List", Order = 3)]
+        [BreadCrumb(Title = "Posts List", Order = 3, IgnoreAjaxRequests = true)]
         public ActionResult Posts()
         {
             this.SetCurrentBreadCrumbTitle("dynamic title 1");
@@ -38,7 +38,7 @@ namespace DNTBreadCrumb.Core.TestWebApp.Controllers
 
         [BreadCrumb(TitleResourceName = "LocalizedPosts",
                     TitleResourceType = typeof(Resources.Controllers_HomeController),
-                    Order = 1)]
+                    Order = 1, IgnoreAjaxRequests = true)]
         public ActionResult LocalizedPosts()
         {
             return View();

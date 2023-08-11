@@ -5,13 +5,17 @@ on: [push, pull_request]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-2019
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2.3.4
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.100
-    - name: Build DNTCaptcha.Core lib
+        dotnet-version: 7.0.306
+    - name: Build DNTBreadCrumb.Core lib
       run: dotnet build ./src/DNTBreadCrumb.Core/DNTBreadCrumb.Core.csproj --configuration Release
+
+    - name: Push Package to NuGet.org
+      if: github.event_name == 'push'
+      run: dotnet nuget push **\*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate      

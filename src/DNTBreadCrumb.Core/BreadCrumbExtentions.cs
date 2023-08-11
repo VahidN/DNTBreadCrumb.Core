@@ -4,292 +4,357 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-#if NETSTANDARD2_0 || NETCOREAPP3_0
 using Microsoft.AspNetCore.Mvc.RazorPages;
-#endif
 
-namespace DNTBreadCrumb.Core
+namespace DNTBreadCrumb.Core;
+
+/// <summary>
+///     BreadCrumb Extentions
+/// </summary>
+public static class BreadCrumbExtentions
 {
     /// <summary>
-    /// BreadCrumb Extentions
+    ///     The key value of the current item in the ctx.Items
     /// </summary>
-    public static class BreadCrumbExtentions
+    public const string CurrentBreadCrumbKey = "Current_BreadCrumb_Key";
+
+    /// <summary>
+    ///     Clears the stack of the current items
+    /// </summary>
+    /// <param name="ctx"></param>
+    public static bool ClearBreadCrumbs(this HttpContext ctx)
     {
-        /// <summary>
-        /// The key value of the current item in the ctx.Items
-        /// </summary>
-        public const string CurrentBreadCrumbKey = "Current_BreadCrumb_Key";
-
-        /// <summary>
-        /// Clears the stack of the current items
-        /// </summary>
-        /// <param name="ctx"></param>
-        public static bool ClearBreadCrumbs(this HttpContext ctx)
+        if (ctx == null)
         {
-            if (ctx == null)
-            {
-                return false;
-            }
-
-            ctx.Items[CurrentBreadCrumbKey] = new List<BreadCrumb>();
-
-            return true;
+            return false;
         }
 
-        /// <summary>
-        /// Clears the stack of the current items
-        /// </summary>
-        /// <param name="ctx"></param>
-        public static bool ClearBreadCrumbs(this Controller ctx)
+        ctx.Items[CurrentBreadCrumbKey] = new List<BreadCrumb>();
+
+        return true;
+    }
+
+    /// <summary>
+    ///     Clears the stack of the current items
+    /// </summary>
+    /// <param name="ctx"></param>
+    public static bool ClearBreadCrumbs(this Controller ctx)
+    {
+        if (ctx == null)
         {
-            return ctx.HttpContext.ClearBreadCrumbs();
+            throw new ArgumentNullException(nameof(ctx));
         }
 
-#if NETSTANDARD2_0 || NETCOREAPP3_0
-        /// <summary>
-        /// Clears the stack of the current items
-        /// </summary>
-        public static bool ClearBreadCrumbs(this PageModel pageModel)
+        return ctx.HttpContext.ClearBreadCrumbs();
+    }
+
+    /// <summary>
+    ///     Adds a custom bread crumb to the list
+    /// </summary>
+    /// <param name="ctx"></param>
+    /// <param name="breadCrumb"></param>
+    public static bool AddBreadCrumb(this HttpContext? ctx, BreadCrumb breadCrumb)
+    {
+        if (ctx is null)
         {
-            return pageModel.HttpContext.ClearBreadCrumbs();
-        }
-#endif
-
-        /// <summary>
-        /// Adds a custom bread crumb to the list
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="breadCrumb"></param>
-        public static bool AddBreadCrumb(this HttpContext ctx, BreadCrumb breadCrumb)
-        {
-            if (ctx == null)
-            {
-                return false;
-            }
-
-            var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ?? new List<BreadCrumb>();
-            if (currentBreadCrumbs.Any(crumb => crumb.Url.Equals(breadCrumb.Url, StringComparison.OrdinalIgnoreCase)))
-            {
-                return false;
-            }
-
-            currentBreadCrumbs.Add(breadCrumb);
-            ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;
-
-            return true;
+            return false;
         }
 
-        /// <summary>
-        /// Adds a custom bread crumb to the list
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="breadCrumb"></param>
-        public static bool AddBreadCrumb(this Controller ctx, BreadCrumb breadCrumb)
+        var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ?? new List<BreadCrumb>();
+        if (currentBreadCrumbs.Any(crumb => crumb.Url != null &&
+                                            crumb.Url.Equals(breadCrumb.Url, StringComparison.OrdinalIgnoreCase)))
         {
-            if (ctx == null)
-            {
-                return false;
-            }
-
-            ctx.HttpContext.AddBreadCrumb(breadCrumb);
-
-            return true;
+            return false;
         }
 
-        /// <summary>
-        /// Adds a custom bread crumb to the list
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="breadCrumbAction"></param>
-        public static bool AddBreadCrumb(this Controller ctx, Action<BreadCrumb> breadCrumbAction)
+        currentBreadCrumbs.Add(breadCrumb);
+        ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;
+
+        return true;
+    }
+
+    /// <summary>
+    ///     Adds a custom bread crumb to the list
+    /// </summary>
+    /// <param name="ctx"></param>
+    /// <param name="breadCrumb"></param>
+    public static bool AddBreadCrumb(this Controller? ctx, BreadCrumb breadCrumb)
+    {
+        if (ctx == null)
         {
-            var breadCrumb = new BreadCrumb();
-            breadCrumbAction(breadCrumb);
-            return ctx.AddBreadCrumb(breadCrumb);
+            return false;
         }
 
-#if NETSTANDARD2_0 || NETCOREAPP3_0
-        /// <summary>
-        /// Adds a custom bread crumb to the list
-        /// </summary>
-        public static bool AddBreadCrumb(this PageModel pageModel, BreadCrumb breadCrumb)
+        ctx.HttpContext.AddBreadCrumb(breadCrumb);
+
+        return true;
+    }
+
+    /// <summary>
+    ///     Adds a custom bread crumb to the list
+    /// </summary>
+    /// <param name="ctx"></param>
+    /// <param name="breadCrumbAction"></param>
+    public static bool AddBreadCrumb(this Controller ctx, Action<BreadCrumb> breadCrumbAction)
+    {
+        if (breadCrumbAction == null)
         {
-            pageModel.HttpContext.AddBreadCrumb(breadCrumb);
-            return true;
+            throw new ArgumentNullException(nameof(breadCrumbAction));
         }
 
-        /// <summary>
-        /// Adds a custom bread crumb to the list
-        /// </summary>
-        public static bool AddBreadCrumb(this PageModel pageModel, Action<BreadCrumb> breadCrumbAction)
+        var breadCrumb = new BreadCrumb();
+        breadCrumbAction(breadCrumb);
+        return ctx.AddBreadCrumb(breadCrumb);
+    }
+
+    /// <summary>
+    ///     Sets the specified item's title
+    /// </summary>
+    /// <param name="ctx"></param>
+    /// <param name="url"></param>
+    /// <param name="title"></param>
+    public static bool SetBreadCrumbTitle(this HttpContext? ctx, string url, string title)
+    {
+        if (ctx == null)
         {
-            var breadCrumb = new BreadCrumb();
-            breadCrumbAction(breadCrumb);
-            return pageModel.AddBreadCrumb(breadCrumb);
-        }
-#endif
-
-        /// <summary>
-        /// Sets the specified item's title
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="url"></param>
-        /// <param name="title"></param>
-        public static bool SetBreadCrumbTitle(this HttpContext ctx, string url, string title)
-        {
-            if (ctx == null)
-            {
-                return false;
-            }
-
-            var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ?? new List<BreadCrumb>();
-            var breadCrumb = currentBreadCrumbs.FirstOrDefault(crumb => crumb.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
-            if (breadCrumb == null)
-            {
-                return false;
-            }
-
-            breadCrumb.Title = title;
-            ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;
-
-            return true;
+            return false;
         }
 
-        /// <summary>
-        /// Sets the specified item's title
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="url"></param>
-        /// <param name="title"></param>
-        public static bool SetBreadCrumbTitle(this Controller ctx, string url, string title)
+        var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ?? new List<BreadCrumb>();
+        var breadCrumb =
+            currentBreadCrumbs.FirstOrDefault(crumb => crumb.Url != null &&
+                                                       crumb.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
+        if (breadCrumb == null)
         {
-            return ctx.HttpContext.SetBreadCrumbTitle(url, title);
+            return false;
         }
 
-#if NETSTANDARD2_0 || NETCOREAPP3_0
-        /// <summary>
-        /// Sets the specified item's title
-        /// </summary>
-        public static bool SetBreadCrumbTitle(this PageModel pageModel, string url, string title)
-        {
-            return pageModel.HttpContext.SetBreadCrumbTitle(url, title);
-        }
-#endif
+        breadCrumb.Title = title;
+        ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;
 
-        /// <summary>
-        /// Sets the current item's title. It's useful for changing the title of the current action method's bread crumb dynamically.
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="title"></param>
-        public static bool SetCurrentBreadCrumbTitle(this HttpContext ctx, string title)
-        {
-            return ctx.ModifyCurrentBreadCrumb(b => b.Title = title);
-        }
+        return true;
+    }
 
-        /// <summary>
-        /// Sets the current item's title. It's useful for changing the title of the current action method's bread crumb dynamically.
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="title"></param>
-        public static bool SetCurrentBreadCrumbTitle(this Controller ctx, string title)
+    /// <summary>
+    ///     Sets the specified item's title
+    /// </summary>
+    /// <param name="ctx"></param>
+    /// <param name="url"></param>
+    /// <param name="title"></param>
+    public static bool SetBreadCrumbTitle(this Controller ctx, string url, string title)
+    {
+        if (ctx == null)
         {
-            return ctx.HttpContext.SetCurrentBreadCrumbTitle(title);
+            throw new ArgumentNullException(nameof(ctx));
         }
 
-#if NETSTANDARD2_0 || NETCOREAPP3_0
-        /// <summary>
-        /// Sets the current item's title. It's useful for changing the title of the current action method's bread crumb dynamically.
-        /// </summary>
-        public static bool SetCurrentBreadCrumbTitle(this PageModel pageModel, string title)
+        return ctx.HttpContext.SetBreadCrumbTitle(url, title);
+    }
+
+    /// <summary>
+    ///     Sets the current item's title. It's useful for changing the title of the current action method's bread crumb
+    ///     dynamically.
+    /// </summary>
+    /// <param name="ctx"></param>
+    /// <param name="title"></param>
+    public static bool SetCurrentBreadCrumbTitle(this HttpContext ctx, string title)
+    {
+        return ctx.ModifyCurrentBreadCrumb(b => b.Title = title);
+    }
+
+    /// <summary>
+    ///     Sets the current item's title. It's useful for changing the title of the current action method's bread crumb
+    ///     dynamically.
+    /// </summary>
+    /// <param name="ctx"></param>
+    /// <param name="title"></param>
+    public static bool SetCurrentBreadCrumbTitle(this Controller ctx, string title)
+    {
+        if (ctx == null)
         {
-            return pageModel.HttpContext.SetCurrentBreadCrumbTitle(title);
-        }
-#endif
-
-        /// <summary>
-        ///     Modifies the current bread crumb
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="breadCrumbAction"></param>
-        public static bool ModifyCurrentBreadCrumb(this HttpContext ctx, Action<BreadCrumb> breadCrumbAction)
-        {
-            if (ctx == null)
-            {
-                return false;
-            }
-
-            var url = ctx.Request.GetEncodedUrl();
-            var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ??
-                                     new List<BreadCrumb>();
-            var breadCrumb = currentBreadCrumbs.FirstOrDefault(crumb =>
-                crumb.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
-            if (breadCrumb == null)
-            {
-                return false;
-            }
-
-            breadCrumbAction(breadCrumb);
-            ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;
-
-            return true;
+            throw new ArgumentNullException(nameof(ctx));
         }
 
-        /// <summary>
-        ///     Modifies the current bread crumb
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="breadCrumbAction"></param>
-        public static bool ModifyCurrentBreadCrumb(this Controller ctx, Action<BreadCrumb> breadCrumbAction)
+        return ctx.HttpContext.SetCurrentBreadCrumbTitle(title);
+    }
+
+    /// <summary>
+    ///     Modifies the current bread crumb
+    /// </summary>
+    /// <param name="ctx"></param>
+    /// <param name="breadCrumbAction"></param>
+    public static bool ModifyCurrentBreadCrumb(this HttpContext? ctx, Action<BreadCrumb> breadCrumbAction)
+    {
+        if (breadCrumbAction == null)
         {
-            return ctx.HttpContext.ModifyCurrentBreadCrumb(breadCrumbAction);
+            throw new ArgumentNullException(nameof(breadCrumbAction));
         }
 
-#if NETSTANDARD2_0 || NETCOREAPP3_0
-        /// <summary>
-        ///     Modifies the current bread crumb
-        /// </summary>
-        public static bool ModifyCurrentBreadCrumb(this PageModel pageModel, Action<BreadCrumb> breadCrumbAction)
+        if (ctx == null)
         {
-            return pageModel.HttpContext.ModifyCurrentBreadCrumb(breadCrumbAction);
-        }
-#endif
-
-        /// <summary>
-        /// Returns all the breadcrumbs
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="breadCrumbFilter"></param>
-        public static IEnumerable<BreadCrumb> GetBreadCrumbs(this HttpContext ctx, Predicate<BreadCrumb> breadCrumbFilter = null)
-        {
-            if (ctx == null)
-            {
-                return Enumerable.Empty<BreadCrumb>();
-            }
-
-            var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ??
-                                     new List<BreadCrumb>();
-
-            return currentBreadCrumbs.Where(breadCrumb => breadCrumbFilter == null || breadCrumbFilter(breadCrumb));
+            return false;
         }
 
-        /// <summary>
-        /// Returns all the breadcrumbs
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="breadCrumbFilter"></param>
-        public static IEnumerable<BreadCrumb> GetBreadCrumbs(this Controller ctx, Predicate<BreadCrumb> breadCrumbFilter = null)
+        var url = ctx.Request.GetEncodedUrl();
+        var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ??
+                                 new List<BreadCrumb>();
+        var breadCrumb = currentBreadCrumbs.FirstOrDefault(crumb => crumb.Url != null &&
+                                                                    crumb.Url.Equals(url,
+                                                                         StringComparison.OrdinalIgnoreCase));
+        if (breadCrumb == null)
         {
-            return ctx.HttpContext.GetBreadCrumbs(breadCrumbFilter);
+            return false;
         }
 
-#if NETSTANDARD2_0 || NETCOREAPP3_0
-        /// <summary>
-        /// Returns all the breadcrumbs
-        /// </summary>
-        public static IEnumerable<BreadCrumb> GetBreadCrumbs(this PageModel pageModel, Predicate<BreadCrumb> breadCrumbFilter = null)
+        breadCrumbAction(breadCrumb);
+        ctx.Items[CurrentBreadCrumbKey] = currentBreadCrumbs;
+
+        return true;
+    }
+
+    /// <summary>
+    ///     Modifies the current bread crumb
+    /// </summary>
+    /// <param name="ctx"></param>
+    /// <param name="breadCrumbAction"></param>
+    public static bool ModifyCurrentBreadCrumb(this Controller ctx, Action<BreadCrumb> breadCrumbAction)
+    {
+        if (ctx == null)
         {
-            return pageModel.HttpContext.GetBreadCrumbs(breadCrumbFilter);
+            throw new ArgumentNullException(nameof(ctx));
         }
-#endif
+
+        return ctx.HttpContext.ModifyCurrentBreadCrumb(breadCrumbAction);
+    }
+
+    /// <summary>
+    ///     Returns all the breadcrumbs
+    /// </summary>
+    /// <param name="ctx"></param>
+    /// <param name="breadCrumbFilter"></param>
+    public static IEnumerable<BreadCrumb> GetBreadCrumbs(this HttpContext? ctx,
+                                                         Predicate<BreadCrumb>? breadCrumbFilter = null)
+    {
+        if (ctx == null)
+        {
+            return Enumerable.Empty<BreadCrumb>();
+        }
+
+        var currentBreadCrumbs = ctx.Items[CurrentBreadCrumbKey] as List<BreadCrumb> ??
+                                 new List<BreadCrumb>();
+
+        return currentBreadCrumbs.Where(breadCrumb => breadCrumbFilter == null || breadCrumbFilter(breadCrumb));
+    }
+
+    /// <summary>
+    ///     Returns all the breadcrumbs
+    /// </summary>
+    /// <param name="ctx"></param>
+    /// <param name="breadCrumbFilter"></param>
+    public static IEnumerable<BreadCrumb> GetBreadCrumbs(this Controller ctx,
+                                                         Predicate<BreadCrumb>? breadCrumbFilter = null)
+    {
+        if (ctx == null)
+        {
+            throw new ArgumentNullException(nameof(ctx));
+        }
+
+        return ctx.HttpContext.GetBreadCrumbs(breadCrumbFilter);
+    }
+
+    /// <summary>
+    ///     Clears the stack of the current items
+    /// </summary>
+    public static bool ClearBreadCrumbs(this PageModel pageModel)
+    {
+        if (pageModel == null)
+        {
+            throw new ArgumentNullException(nameof(pageModel));
+        }
+
+        return pageModel.HttpContext.ClearBreadCrumbs();
+    }
+
+    /// <summary>
+    ///     Adds a custom bread crumb to the list
+    /// </summary>
+    public static bool AddBreadCrumb(this PageModel pageModel, BreadCrumb breadCrumb)
+    {
+        if (pageModel == null)
+        {
+            throw new ArgumentNullException(nameof(pageModel));
+        }
+
+        pageModel.HttpContext.AddBreadCrumb(breadCrumb);
+        return true;
+    }
+
+    /// <summary>
+    ///     Adds a custom bread crumb to the list
+    /// </summary>
+    public static bool AddBreadCrumb(this PageModel pageModel, Action<BreadCrumb> breadCrumbAction)
+    {
+        if (breadCrumbAction == null)
+        {
+            throw new ArgumentNullException(nameof(breadCrumbAction));
+        }
+
+        var breadCrumb = new BreadCrumb();
+        breadCrumbAction(breadCrumb);
+        return pageModel.AddBreadCrumb(breadCrumb);
+    }
+
+    /// <summary>
+    ///     Sets the specified item's title
+    /// </summary>
+    public static bool SetBreadCrumbTitle(this PageModel pageModel, string url, string title)
+    {
+        if (pageModel == null)
+        {
+            throw new ArgumentNullException(nameof(pageModel));
+        }
+
+        return pageModel.HttpContext.SetBreadCrumbTitle(url, title);
+    }
+
+    /// <summary>
+    ///     Sets the current item's title. It's useful for changing the title of the current action method's bread crumb
+    ///     dynamically.
+    /// </summary>
+    public static bool SetCurrentBreadCrumbTitle(this PageModel pageModel, string title)
+    {
+        if (pageModel == null)
+        {
+            throw new ArgumentNullException(nameof(pageModel));
+        }
+
+        return pageModel.HttpContext.SetCurrentBreadCrumbTitle(title);
+    }
+
+    /// <summary>
+    ///     Modifies the current bread crumb
+    /// </summary>
+    public static bool ModifyCurrentBreadCrumb(this PageModel pageModel, Action<BreadCrumb> breadCrumbAction)
+    {
+        if (pageModel == null)
+        {
+            throw new ArgumentNullException(nameof(pageModel));
+        }
+
+        return pageModel.HttpContext.ModifyCurrentBreadCrumb(breadCrumbAction);
+    }
+
+    /// <summary>
+    ///     Returns all the breadcrumbs
+    /// </summary>
+    public static IEnumerable<BreadCrumb> GetBreadCrumbs(this PageModel pageModel,
+                                                         Predicate<BreadCrumb>? breadCrumbFilter = null)
+    {
+        if (pageModel == null)
+        {
+            throw new ArgumentNullException(nameof(pageModel));
+        }
+
+        return pageModel.HttpContext.GetBreadCrumbs(breadCrumbFilter);
     }
 }

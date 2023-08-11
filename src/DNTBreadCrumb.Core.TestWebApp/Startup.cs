@@ -16,8 +16,7 @@ namespace DNTBreadCrumb.Core.TestWebApp
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddMvc()
                     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-                    .AddDataAnnotationsLocalization()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                    .AddDataAnnotationsLocalization();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

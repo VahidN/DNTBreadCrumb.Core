@@ -6,9 +6,11 @@
   </a>
 </p>
 
-`DNTBreadCrumb.Core` Creates custom bread crumb definitions, based on Twitter Bootstrap 3.x and 4.x features for ASP.NET Core applications.
+`DNTBreadCrumb.Core` Creates custom bread crumb definitions, based on Twitter Bootstrap features for ASP.NET Core applications.
 
 ## Install via NuGet
+
+[![Nuget](https://img.shields.io/nuget/v/DNTBreadCrumb.Core)](http://www.nuget.org/packages/DNTBreadCrumb.Core/)
 
 To install DNTBreadCrumb.Core, run the following command in the Package Manager Console:
 
@@ -31,7 +33,7 @@ You can also view the [package page](http://www.nuget.org/packages/DNTBreadCrumb
 ```xml
  <breadcrumb asp-homepage-title="Home"
              asp-homepage-url="@Url.Action("Index", "Home", values: new { area = "" })"
-             asp-bootstrap-version="V3"
+             asp-bootstrap-version="V5"
              asp-homepage-glyphicon="glyphicon glyphicon-home"></breadcrumb>
 ```
 

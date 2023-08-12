@@ -1,28 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <Description>DNTBreadCrumb.Core Creates custom bread crumb definitions, based on Twitter Bootstrap features.</Description>
-    <VersionPrefix>2.0.1</VersionPrefix>
-    <Authors>Vahid Nasiri</Authors>
-    <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>DNTBreadCrumb.Core</AssemblyName>
-    <PackageId>DNTBreadCrumb.Core</PackageId>
-    <PackageTags>MVC;breadcrumb;bread;crumb;Twitter;Bootstrap;.NET Core;aspnetcore</PackageTags>
-    <PackageProjectUrl>https://github.com/VahidN/DNTBreadCrumb.Core</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/VahidN/DNTBreadCrumb.Core</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <DebugType>embedded</DebugType>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Platforms>AnyCPU</Platforms>
-  </PropertyGroup>
-  <PropertyGroup>
+    <PropertyGroup>
+        <Description>DNTBreadCrumb.Core Creates custom bread crumb definitions, based on Twitter Bootstrap features.</Description>
+        <VersionPrefix>2.0.2</VersionPrefix>
+        <Authors>Vahid Nasiri</Authors>
+        <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <AssemblyName>DNTBreadCrumb.Core</AssemblyName>
+        <PackageId>DNTBreadCrumb.Core</PackageId>
+        <PackageTags>MVC;breadcrumb;bread;crumb;Twitter;Bootstrap;.NET Core;aspnetcore</PackageTags>
+        <PackageProjectUrl>https://github.com/VahidN/DNTBreadCrumb.Core</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/VahidN/DNTBreadCrumb.Core</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+        <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <DebugType>embedded</DebugType>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+    <PropertyGroup>
         <LangVersion>latest</LangVersion>
         <AnalysisLevel>latest</AnalysisLevel>
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
@@ -36,9 +36,19 @@
         <Deterministic>true</Deterministic>
         <Features>strict</Features>
         <ReportAnalyzer>true</ReportAnalyzer>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Meziantou.Analyzer" Version="2.0.82">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="9.7.0.75501">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    </ItemGroup>
 </Project>

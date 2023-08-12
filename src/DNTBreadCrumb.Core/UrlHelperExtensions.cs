@@ -27,14 +27,16 @@ public static class UrlHelperExtensions
         }
 
         var routeValues = helper.ActionContext.RouteData.Values;
-        var routeValueKeys = routeValues.Keys.Where(o => o != "controller" && o != "action").ToList();
+        var routeValueKeys = routeValues.Keys.Where(o =>
+                                                        !string.Equals(o, "controller", StringComparison.Ordinal) &&
+                                                        !string.Equals(o, "action", StringComparison.Ordinal)).ToList();
 
         // Temporarily remove route values
-        var oldRouteValues = new Dictionary<string, object>();
+        var oldRouteValues = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var key in routeValueKeys)
         {
-            if (removeRouteValues != null && !removeRouteValues.Contains(key))
+            if (removeRouteValues != null && !removeRouteValues.Contains(key, StringComparer.OrdinalIgnoreCase))
             {
                 continue;
             }

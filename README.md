@@ -34,7 +34,7 @@ You can also view the [package page](http://www.nuget.org/packages/DNTBreadCrumb
  <breadcrumb asp-homepage-title="Home"
              asp-homepage-url="@Url.Action("Index", "Home", values: new { area = "" })"
              asp-bootstrap-version="V5"
-             asp-homepage-glyphicon="glyphicon glyphicon-home"></breadcrumb>
+             asp-homepage-glyphicon="bi bi-house"></breadcrumb>
 ```
 
 - Now you can add the `BreadCrumb` attributes to your controller or action methods:

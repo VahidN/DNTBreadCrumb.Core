@@ -21,13 +21,13 @@ public class HomeController : Controller
         this.AddBreadCrumb(new BreadCrumb
                            {
                                Title = "Wiki",
-                               Url = string.Format("{0}?id=1", Url.Action("Index", "Home", new { area = "" })),
+                               Url = $"{Url.Action("Index", "Home", new { area = "" })}?id=1",
                                Order = 1,
                            });
         this.AddBreadCrumb(new BreadCrumb
                            {
                                Title = "Lab",
-                               Url = string.Format("{0}?id=2", Url.Action("Index", "Home", new { area = "" })),
+                               Url = $"{Url.Action("Index", "Home", new { area = "" })}?id=2",
                                Order = 2,
                            });
 

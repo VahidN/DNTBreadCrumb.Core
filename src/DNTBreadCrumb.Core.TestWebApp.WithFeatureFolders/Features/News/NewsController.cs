@@ -6,7 +6,7 @@ namespace DNTBreadCrumb.Core.TestWebApp.WithFeatureFolders.Features.News;
                UseDefaultRouteUrl = true,
                RemoveAllDefaultRouteValues = true,
                Order = 0,
-               GlyphIcon = "glyphicon glyphicon-link",
+               GlyphIcon = "bi bi-link-45deg",
                IgnoreAjaxRequests = true)]
 public class NewsController : Controller
 {

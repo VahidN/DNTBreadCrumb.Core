@@ -6,7 +6,7 @@ namespace DNTBreadCrumb.Core.TestWebApp.Controllers;
                UseDefaultRouteUrl = true,
                RemoveAllDefaultRouteValues = true,
                Order = 0,
-               GlyphIcon = "glyphicon glyphicon-link",
+               GlyphIcon = "bi bi-link-45deg",
                IgnoreAjaxRequests = true)]
 public class NewsController : Controller
 {
@@ -26,7 +26,7 @@ public class NewsController : Controller
     {
         if (id != null)
         {
-            this.SetCurrentBreadCrumbTitle(string.Format("News item {0}", id.Value));
+            this.SetCurrentBreadCrumbTitle($"News item {id.Value}");
             this.AddBreadCrumb(new BreadCrumb
                                {
                                    Title = "News Archive",

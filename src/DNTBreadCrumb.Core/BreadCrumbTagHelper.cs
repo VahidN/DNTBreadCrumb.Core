@@ -29,7 +29,7 @@ public class BreadCrumbTagHelper : TagHelper
     public string? HomePageUrl { set; get; }
 
     /// <summary>
-    ///     such as `glyphicon glyphicon-home`
+    ///     such as `bi bi-house`
     /// </summary>
     [HtmlAttributeName("asp-homepage-glyphicon")]
     public string? HomePageGlyphIcon { set; get; }
